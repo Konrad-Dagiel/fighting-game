@@ -1,25 +1,28 @@
-
+//initialize canvas and context
 const canvas = document.getElementById('canvas');
 const c = canvas.getContext('2d');
 canvas.width=1024;
 canvas.height=576;
 c.fillRect(0,0,canvas.width,canvas.height);
 
+ //set gravity
 const gravity = 0.7;
 
+//define Sprite class
 class Sprite{
+    //constructor takes one object which contains a position obj and velocity var
     constructor({position, velocity}){
         this.position = position;
         this.velocity = velocity;
         this.height = 150;
         this.lastKey;
     }
-
+    //draw the Sprite
     draw() {
         c.fillStyle = 'red';
         c.fillRect(this.position.x, this.position.y, 50, this.height);
     }
-
+    //move the Sprite
     update(){
         this.draw()
         this.position.x += this.velocity.x;
@@ -31,7 +34,7 @@ class Sprite{
         else this.velocity.y += gravity;
     }
 }
-
+//initialize player
 const player = new Sprite({
     position:{
         x: 0,
@@ -43,7 +46,7 @@ const player = new Sprite({
     }
 });
 
-
+//initialize enemy
 const enemy = new Sprite({
     position:{
         x: 400,
@@ -54,7 +57,7 @@ const enemy = new Sprite({
         y: 0
     }
 });
-
+//object containing wether keys are pressed or not
 const keys={
     a:{
         pressed:false
@@ -70,16 +73,20 @@ const keys={
     }
 }
 
-
+//main loop
 function animate(){
+    //loop
     window.requestAnimationFrame(animate);
+    //refresh frame
     c.fillStyle = "black";
     c.fillRect(0,0,canvas.width,canvas.height);
+    //move sprites
     player.update();
     enemy.update();
-
+    //reset velocity to 0 on each new frame
     player.velocity.x=0;
     enemy.velocity.x=0;
+    //move in the direction of the last pressed key
     if (keys.a.pressed && player.lastKey==='a'){
         player.velocity.x = -5;
     } else if (keys.d.pressed && player.lastKey==='d'){
@@ -94,9 +101,10 @@ function animate(){
 }
 
 animate();
-
+//event listeners
 window.addEventListener('keydown', (event) => {
     switch(event.key){
+        //move player
         case 'd':
             keys.d.pressed=true;
             player.lastKey='d';
@@ -108,7 +116,7 @@ window.addEventListener('keydown', (event) => {
         case 'w':
             player.velocity.y=-20;
             break;
-
+        //move enemy
         case 'ArrowRight':
             keys.ArrowRight.pressed=true;
             enemy.lastKey='ArrowRight';
@@ -123,7 +131,7 @@ window.addEventListener('keydown', (event) => {
         
     }
 });
-
+//stop moving player and enemy
 window.addEventListener('keyup', (event) => {
     switch(event.key){
         case 'd':
