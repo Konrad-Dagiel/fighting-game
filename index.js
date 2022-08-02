@@ -65,6 +65,10 @@ const player = new Fighter({
         fall:{
             imageSrc:'./img/samuraiMack/Fall.png',
             framesMax:2
+        },
+        attack1:{
+            imageSrc:'./img/samuraiMack/Attack1.png',
+            framesMax:6
         }
     }
 });
@@ -85,8 +89,34 @@ const enemy = new Fighter({
         y:0
     },
     imageSrc:'./img/kenji/Idle.png',
-    framesMax:4
-});
+    framesMax:4,
+    scale:2.5,
+    offset: {
+        x:215,
+        y:167
+    },
+    sprites:{
+    idle:{
+        imageSrc:'./img/kenji/Idle.png',
+        framesMax:4
+    },
+    run:{
+        imageSrc:'./img/kenji/Run.png',
+        framesMax:8
+    },
+    jump:{
+        imageSrc:'./img/kenji/Jump.png',
+        framesMax:2
+    },
+    fall:{
+        imageSrc:'./img/kenji/Fall.png',
+        framesMax:2
+    },
+    attack1:{
+        imageSrc:'./img/kenji/Attack1.png',
+        framesMax:4
+    }
+}});
 //object containing wether keys are pressed or not
 const keys={
     a:{
@@ -138,9 +168,20 @@ function animate(){
     
 
     if (keys.ArrowLeft.pressed && enemy.lastKey==='ArrowLeft'){
+        enemy.switchSprite('run');
         enemy.velocity.x = -5;
     } else if (keys.ArrowRight.pressed && enemy.lastKey==='ArrowRight'){
+        enemy.switchSprite('run');
         enemy.velocity.x= 5;
+    }else{
+        enemy.switchSprite('idle');
+    }
+
+    if (enemy.velocity.y<0 ){
+        enemy.switchSprite('jump');
+
+    } else if (enemy.velocity.y>0){
+        enemy.switchSprite('fall');
     }
     // collisions
     if (rectangularCollision({rectangle1:player, rectangle2:enemy})
