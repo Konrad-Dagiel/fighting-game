@@ -69,7 +69,19 @@ const player = new Fighter({
         attack1:{
             imageSrc:'./img/samuraiMack/Attack1.png',
             framesMax:6
+        },
+        takeHit:{
+            imageSrc:'./img/samuraiMack/Take Hit - white silhouette.png',
+            framesMax:4
         }
+    },
+    attackBox:{
+        offset:{
+            x:100,
+            y:50
+        },
+        width:150,
+        height:50
     }
 });
 
@@ -96,27 +108,40 @@ const enemy = new Fighter({
         y:167
     },
     sprites:{
-    idle:{
-        imageSrc:'./img/kenji/Idle.png',
-        framesMax:4
+        idle:{
+            imageSrc:'./img/kenji/Idle.png',
+            framesMax:4
+        },
+        run:{
+            imageSrc:'./img/kenji/Run.png',
+            framesMax:8
+        },
+        jump:{
+            imageSrc:'./img/kenji/Jump.png',
+            framesMax:2
+        },
+        fall:{
+            imageSrc:'./img/kenji/Fall.png',
+            framesMax:2
+        },
+        attack1:{
+            imageSrc:'./img/kenji/Attack1.png',
+            framesMax:4
+        },
+        takeHit:{
+            imageSrc:'./img/kenji/Take hit.png',
+            framesMax:3
+        }
     },
-    run:{
-        imageSrc:'./img/kenji/Run.png',
-        framesMax:8
-    },
-    jump:{
-        imageSrc:'./img/kenji/Jump.png',
-        framesMax:2
-    },
-    fall:{
-        imageSrc:'./img/kenji/Fall.png',
-        framesMax:2
-    },
-    attack1:{
-        imageSrc:'./img/kenji/Attack1.png',
-        framesMax:4
+    attackBox:{
+        offset:{
+            x:-170,
+            y:50
+        },
+        width:170,
+        height:50
     }
-}});
+});
 //object containing wether keys are pressed or not
 const keys={
     a:{
@@ -185,21 +210,30 @@ function animate(){
     }
     // collisions
     if (rectangularCollision({rectangle1:player, rectangle2:enemy})
-        && player.isAttacking)
+        && player.isAttacking && player.framesCurrent === 4)
         {
             console.log("you attack successfully");
-            enemy.health -= 20;
+            enemy.takeHit();
             document.querySelector('#enemyHealth').style.width = enemy.health + '%';
             player.isAttacking=false;
         }
+
+    //if player misses
+    if (player.isAttacking && player.framesCurrent ===4){
+        player.isAttacking=false;
+    }
+
     if (rectangularCollision({rectangle1:enemy, rectangle2:player})
-    && enemy.isAttacking)
+    && enemy.isAttacking && enemy.framesCurrent === 2)
     {
         console.log("enemy attacks successfully");
-        player.health -= 20;
+        player.takeHit();
         document.querySelector('#playerHealth').style.width = player.health + '%';
         enemy.isAttacking=false;
         
+    }
+    if (enemy.isAttacking && enemy.framesCurrent ===2){
+        enemy.isAttacking=false;
     }
     //end game based on hp
     if (enemy.health <=0 || player.health <=0){
