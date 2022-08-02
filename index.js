@@ -73,6 +73,10 @@ const player = new Fighter({
         takeHit:{
             imageSrc:'./img/samuraiMack/Take Hit - white silhouette.png',
             framesMax:4
+        },
+        death:{
+            imageSrc:'./img/samuraiMack/Death.png',
+            framesMax:6
         }
     },
     attackBox:{
@@ -131,6 +135,10 @@ const enemy = new Fighter({
         takeHit:{
             imageSrc:'./img/kenji/Take hit.png',
             framesMax:3
+        },
+        death:{
+            imageSrc:'./img/kenji/Death.png',
+            framesMax:7
         }
     },
     attackBox:{
@@ -168,6 +176,8 @@ function animate(){
     //move sprites
     background.update();
     shop.update();
+    c.fillStyle='rgba(255,255,255, 0.2)'
+    c.fillRect(0,0,canvas.width,canvas.height);
     player.update();
     enemy.update();
     //reset velocity to 0 on each new frame
@@ -214,7 +224,10 @@ function animate(){
         {
             console.log("you attack successfully");
             enemy.takeHit();
-            document.querySelector('#enemyHealth').style.width = enemy.health + '%';
+
+            gsap.to('#enemyHealth', {
+                width:enemy.health + '%'
+            })
             player.isAttacking=false;
         }
 
@@ -228,7 +241,9 @@ function animate(){
     {
         console.log("enemy attacks successfully");
         player.takeHit();
-        document.querySelector('#playerHealth').style.width = player.health + '%';
+        gsap.to('#playerHealth', {
+            width:player.health + '%'
+        })
         enemy.isAttacking=false;
         
     }
@@ -247,23 +262,29 @@ decreaseTimer()
 animate();
 //event listeners
 window.addEventListener('keydown', (event) => {
-    switch(event.key){
-        //move player
-        case 'd':
-            keys.d.pressed=true;
-            player.lastKey='d';
-            break;
-        case 'a':
-            keys.a.pressed=true;
-            player.lastKey='a';
-            break;
-        case 'w':
-            player.velocity.y=-20;
-            break;
-        case 's':
-            player.attack()
-            break;
-        //move enemy
+    if (!player.dead){
+        switch(event.key){
+            //move player
+            case 'd':
+                keys.d.pressed=true;
+                player.lastKey='d';
+                break;
+            case 'a':
+                keys.a.pressed=true;
+                player.lastKey='a';
+                break;
+            case 'w':
+                player.velocity.y=-20;
+                break;
+            case 's':
+                player.attack()
+                break;
+        }
+    }
+    //move enemy
+    if (!enemy.dead){
+        switch(event.key){
+
         case 'ArrowRight':
             keys.ArrowRight.pressed=true;
             enemy.lastKey='ArrowRight';
@@ -278,7 +299,8 @@ window.addEventListener('keydown', (event) => {
         case 'ArrowDown':
             enemy.attack();
             break;
-        
+        }
+    
     }
 });
 //stop moving player and enemy
