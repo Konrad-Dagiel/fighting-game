@@ -317,8 +317,6 @@ window.addEventListener('keyup', (event) => {
             keys.a.pressed=false;
             break;
 
-
-
         case 'ArrowRight':
             keys.ArrowRight.pressed=false;
             break;
