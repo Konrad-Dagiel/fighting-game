@@ -225,7 +225,7 @@ function animate(){
         && player.isAttacking && player.framesCurrent === 2)
         {
             console.log("you attack successfully");
-            enemy.takeHit(20);
+            enemy.takeHit(10);
 
             gsap.to('#enemyHealth', {
                 width:enemy.health + '%'
@@ -243,7 +243,7 @@ function animate(){
     && enemy.isAttacking && enemy.framesCurrent === 2)
     {
         console.log("enemy attacks successfully");
-        player.takeHit(20);
+        player.takeHit(10);
         gsap.to('#playerHealth', {
             width:player.health + '%'
         })

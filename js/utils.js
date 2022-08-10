@@ -9,12 +9,21 @@ function determineWinner({player, enemy, timerId}){
     clearTimeout(timerId)
     if (player.health === enemy.health){
         document.querySelector('#displayText').innerHTML='Tie!';
+        player.switchSprite('death');
+        enemy.switchSprite('death');
+        keys.a.pressed=false;
+        keys.d.pressed=false;
+        keys.ArrowLeft.pressed=false;
+        keys.ArrowRight.pressed=false;
         
     }
     else if (player.health > enemy.health){
         document.querySelector('#displayText').innerHTML='Player 1 Wins!';
         enemy.isAttacking = false;
         enemy.switchSprite('death');
+        keys.ArrowLeft.pressed=false;
+        keys.ArrowRight.pressed=false;
+        
         
 
     }
@@ -22,6 +31,8 @@ function determineWinner({player, enemy, timerId}){
         document.querySelector('#displayText').innerHTML='Player 2 Wins!';
         player.isAttacking = false;
         player.switchSprite('death');
+        keys.a.pressed=false;
+        keys.d.pressed=false;
 
     }
     document.querySelector('#displayText').style.display='flex';
