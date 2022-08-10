@@ -67,8 +67,8 @@ const player = new Fighter({
             framesMax:2
         },
         attack1:{
-            imageSrc:'./img/samuraiMack/Attack1.png',
-            framesMax:6
+            imageSrc:'./img/samuraiMack/Attack11.png',
+            framesMax:4
         },
         takeHit:{
             imageSrc:'./img/samuraiMack/Take Hit - white silhouette.png',
@@ -219,11 +219,13 @@ function animate(){
         enemy.switchSprite('fall');
     }
     // collisions
+
+    //player attacks
     if (rectangularCollision({rectangle1:player, rectangle2:enemy})
-        && player.isAttacking && player.framesCurrent === 4)
+        && player.isAttacking && player.framesCurrent === 2)
         {
             console.log("you attack successfully");
-            enemy.takeHit();
+            enemy.takeHit(20);
 
             gsap.to('#enemyHealth', {
                 width:enemy.health + '%'
@@ -232,21 +234,24 @@ function animate(){
         }
 
     //if player misses
-    if (player.isAttacking && player.framesCurrent ===4){
+    if (player.isAttacking && player.framesCurrent ===2){
         player.isAttacking=false;
     }
 
+    //enemy attacks
     if (rectangularCollision({rectangle1:enemy, rectangle2:player})
     && enemy.isAttacking && enemy.framesCurrent === 2)
     {
         console.log("enemy attacks successfully");
-        player.takeHit();
+        player.takeHit(20);
         gsap.to('#playerHealth', {
             width:player.health + '%'
         })
         enemy.isAttacking=false;
         
     }
+
+    //if enemy misses
     if (enemy.isAttacking && enemy.framesCurrent ===2){
         enemy.isAttacking=false;
     }
