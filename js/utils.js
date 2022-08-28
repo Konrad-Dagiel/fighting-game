@@ -38,6 +38,12 @@ function determineWinner({player, enemy, timerId}){
     document.querySelector('#displayText').style.display='flex';
 
 }
+function inFrameLeft(sprite){
+    return sprite.position.x>0;
+}
+function inFrameRight(sprite){
+    return sprite.position.x+sprite.width<canvas.width;
+}
 
 let timer = 60;
 let timerId;

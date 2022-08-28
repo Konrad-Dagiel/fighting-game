@@ -184,10 +184,10 @@ function animate(){
     player.velocity.x=0;
     enemy.velocity.x=0;
     //move in the direction of the last pressed key
-    if (keys.a.pressed && player.lastKey==='a'){
+    if (keys.a.pressed && player.lastKey==='a'&& inFrameLeft(player)){
         player.velocity.x = -5;
         player.switchSprite('run');
-    } else if (keys.d.pressed && player.lastKey==='d'){
+    } else if (keys.d.pressed && player.lastKey==='d'&& inFrameRight(player)){
         player.velocity.x= 5;
         player.switchSprite('run');
     } else{
@@ -202,10 +202,10 @@ function animate(){
     }
     
 
-    if (keys.ArrowLeft.pressed && enemy.lastKey==='ArrowLeft'){
+    if (keys.ArrowLeft.pressed && enemy.lastKey==='ArrowLeft' && inFrameLeft(enemy)){
         enemy.switchSprite('run');
         enemy.velocity.x = -5;
-    } else if (keys.ArrowRight.pressed && enemy.lastKey==='ArrowRight'){
+    } else if (keys.ArrowRight.pressed && enemy.lastKey==='ArrowRight' && inFrameRight(enemy)){
         enemy.switchSprite('run');
         enemy.velocity.x= 5;
     }else{
